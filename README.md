@@ -1,6 +1,6 @@
-# The official implementation of the paper "RASAT: Integrating Relational Structures into Pretrained Seq2Seq Model for Text-to-SQL"(EMNLP 2022)
+# A fork of the official implementation of the paper "RASAT: Integrating Relational Structures into Pretrained Seq2Seq Model for Text-to-SQL"(EMNLP 2022)
 
-This is the official implementation of the following paper:
+This is a fork of the official implementation of the following paper:
 
 Jiexing Qi and Jingyao Tang and Ziwei He and Xiangpeng Wan and Chenghu Zhou and Xinbing Wang and Quanshi Zhang and Zhouhan Lin. RASAT: Integrating Relational Structures into Pretrained Seq2Seq Model for Text-to-SQL. Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing (EMNLP).
 
@@ -23,12 +23,22 @@ If you use this code, please cite:
 This repository uses git submodules. Clone it like this:
 
 ```
-$ git clone https://github.com/JiexingQi/RASAT.git
-$ cd RASAT
-$ git submodule update --init --recursive
+$ git clone --recurse-submodules https://github.com/Torrin-MSci-Project/rasat.git
 ```
 ## Download the dataset
-Before running the code, you should download dataset files.
+
+Ensure make and unzip are installed, e.g. on Ubuntu run:
+```
+sudo apt install unzip
+sudo apt install make
+```
+
+Download the dataset files by running:
+```
+cd rasat
+./download_datasets.sh
+```
+Alternatively, do it manually by following these instructions.
 
 First, you should create a dictionary like this:
 ```
@@ -83,9 +93,29 @@ Since the docker environment doesn't have stanza, so you should run these comman
 ```
 pip install stanza
 python3 seq2seq/stanza_downloader.py
+CUDA_VISIBLE_DEVICES="0"
+wandb login
 ```
 
-**Note:We only use PICARD for seperately evalutaion.**
+Then to run training/evaluation, run:
+```
+python3 seq2seq/eval_run_seq2seq.py configs/spider/eval_spider_rasat_4160.json
+```
+The second argument can be changed to the config file you want to use for training/evaluation.
+
+For long runs, run the training/evaluation in the background with:
+```
+$ nohup python3 seq2seq/eval_run_seq2seq.py configs/spider/eval_spider_rasat_4160.json &
+```
+This logs output to nohup.out. You can exit the Docker container and close the terminal if you use nohup.
+
+To re-enter the last exited Docker container run:
+
+```
+$ docker start `docker ps -q -l` && docker attach `docker ps -q -l`i
+```
+
+**Note:We only use PICARD for seperately evaluation.**
 
 ### Do not use Docker
 If Docker is not available to you, you could also run it in a python 3.9.7 environment 
