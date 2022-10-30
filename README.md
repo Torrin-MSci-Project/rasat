@@ -27,10 +27,12 @@ $ git clone --recurse-submodules https://github.com/Torrin-MSci-Project/rasat.gi
 ```
 ## Download the dataset
 
-Ensure make and unzip are installed, e.g. on Ubuntu run:
+Ensure pip, make and unzip are installed, e.g. on Ubuntu run:
 ```
 sudo apt install unzip
 sudo apt install make
+sudo apt install python3-pip
+. ~/.profile
 ```
 
 Download the dataset files by running:
@@ -38,50 +40,14 @@ Download the dataset files by running:
 cd rasat
 ./download_datasets.sh
 ```
-Alternatively, do it manually by following these instructions.
-
-First, you should create a dictionary like this:
-```
-mkdir -p dataset_files/ori_dataset
-```
-
-And then you need to download the dataset file to dataset_files/ and just keep it in zip format. The download links are here:
-+ Spider, [link](https://drive.google.com/uc?export=download&id=1_AckYkinAnhqmRQtGsQgUKAnTHxxX5J0)
-+ SParC, [link](https://drive.google.com/uc?export=download&id=13Abvu5SUMSP3SJM-ZIj66mOkeyAquR73)
-+ CoSQL, [link](https://drive.google.com/uc?export=download&id=14x6lsWqlu6gR-aYxa6cemslDN3qT3zxP)
-
-Then unzip those dataset files into dataset_files/ori_dataset. Both files in zip format and unzip format is needed:
-
-```
-unzip dataset_files/spider.zip -d dataset_files/ori_dataset/
-unzip dataset_files/cosql_dataset.zip -d dataset_files/ori_dataset/
-unzip dataset_files/sparc.zip -d dataset_files/ori_dataset/
-```
-
-## The Coreference Resolution Files
-We recommend you just use the generated coreference resolution files. It just needs you run
-
-```
-unzip preprocessed_dataset.zip -d ./dataset_files/
-```
-
-If you want to generate these coreference resolution files by yourself, you could create a new conda environment to install coreferee library since it may have a version conflict with other libraries. The install commands are as follows:
-
-```bash
-conda create -n coreferee python=3.9.7
-conda activate coreferee
-bash run_corefer_processing.sh
-```
-
-and you can just assign the dataset name and the corresponding split, such as 
-```
-python3 get_coref.py --input_path ./cosql_dataset/sql_state_tracking/cosql_dev.json --output_path ./dev_coref.json --dataset_name cosql --mode dev
-```
-
-## Environment setup
 
 ### Use docker
 The best performance is achieved by exploiting PICARD[1], and if you want to reproduce it, we recommend you use Docker.
+
+To install Docker on Ubuntu, run:
+```
+./install_docker.sh
+```
 
 You can simply use 
 ```

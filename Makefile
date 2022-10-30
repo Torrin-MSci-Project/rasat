@@ -132,7 +132,6 @@ eval: pull-eval-image
 		--ipc=host \
 		--privileged=true \
 		--user 13011:13011 \
-		--mount type=bind,source=$(BASE_DIR)/experiment,target=/app/experiment \
 		--mount type=bind,source=$(BASE_DIR)/transformers_cache,target=/transformers_cache \
 		--mount type=bind,source=$(BASE_DIR)/configs,target=/app/configs \
 		--mount type=bind,source=$(BASE_DIR)/wandb,target=/app/wandb \
