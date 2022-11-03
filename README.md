@@ -78,7 +78,7 @@ This logs output to nohup.out. You can exit the Docker container and close the t
 To re-enter the last exited Docker container run:
 
 ```
-docker start `docker ps -q -l` && docker attach `docker ps -q -l`i
+docker start `docker ps -q -l` && docker attach `docker ps -q -l`
 ```
 
 **Note:We only use PICARD for seperately evaluation.**
