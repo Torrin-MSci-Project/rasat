@@ -23,7 +23,7 @@ If you use this code, please cite:
 This repository uses git submodules. Clone it like this:
 
 ```
-$ git clone --recurse-submodules https://github.com/Torrin-MSci-Project/rasat.git
+git clone --recurse-submodules https://github.com/Torrin-MSci-Project/rasat.git
 ```
 ## Download the dataset
 
@@ -71,14 +71,14 @@ The second argument can be changed to the config file you want to use for traini
 
 For long runs, run the training/evaluation in the background with:
 ```
-$ nohup python3 seq2seq/eval_run_seq2seq.py configs/spider/eval_spider_rasat_4160.json &
+nohup python3 seq2seq/eval_run_seq2seq.py configs/spider/eval_spider_rasat_4160.json &
 ```
 This logs output to nohup.out. You can exit the Docker container and close the terminal if you use nohup.
 
 To re-enter the last exited Docker container run:
 
 ```
-$ docker start `docker ps -q -l` && docker attach `docker ps -q -l`i
+docker start `docker ps -q -l` && docker attach `docker ps -q -l`
 ```
 
 To print full eval metrics on a completed Spider experiment with results directory e.g. rasat-spider-dev-20-10-2022, run:
