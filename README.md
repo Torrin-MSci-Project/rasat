@@ -81,6 +81,12 @@ To re-enter the last exited Docker container run:
 $ docker start `docker ps -q -l` && docker attach `docker ps -q -l`i
 ```
 
+To print full eval metrics on a completed Spider experiment with results directory e.g. rasat-spider-dev-20-10-2022, run:
+```
+cd seq2seq/eval_spider
+./eval_experiment rasat-spider-dev-20-10-2022
+```
+
 **Note:We only use PICARD for seperately evaluation.**
 
 ### Do not use Docker
