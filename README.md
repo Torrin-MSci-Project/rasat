@@ -32,6 +32,7 @@ Ensure pip, make and unzip are installed, e.g. on Ubuntu run:
 sudo apt install unzip
 sudo apt install make
 sudo apt install python3-pip
+PATH=~/.local/bin:$PATH
 . ~/.profile
 ```
 
