@@ -42,6 +42,8 @@ from seq2seq.utils.cosql import CoSQLTrainer
 from seq2seq.utils.sparc import SParCTrainer
 from seq2seq.preprocess.get_relation2id_dict import get_relation2id_dict
 
+from seq2seq.eval_spider.format_predictions import format_predictions
+
 from model.model_utils import get_relation_t5_model, get_original_t5_model
 from transformers import T5Config
 
@@ -268,6 +270,15 @@ def main() -> None:
 
             trainer.log_metrics("eval", metrics)
             trainer.save_metrics("eval", metrics)
+
+            # Print full eval metrics for Spider
+            try:
+                if isinstance(trainer, SpiderTrainer):
+                    format_predictions(f"{training_args.output_dir}/predictions_eval_None.json")
+                    os.system(f"cd eval_spider && python evaluate.py --gold ../../dataset_files/ori_dataset/spider/dev_gold.sql --pred {training_args.output_dir}/predictions.sql --etype all --db ../../dataset_files/ori_dataset/spider/database --table ../../dataset_files/ori_dataset/spider/tables.json")
+            except Exception as e:
+                print(e)
+                print("The detailed evaluation threw an error, skipping.")
 
         # Testing
         if training_args.do_predict:

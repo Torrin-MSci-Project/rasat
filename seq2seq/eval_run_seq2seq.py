@@ -291,8 +291,9 @@ def main() -> None:
 
             # Print full eval metrics for Spider
             try:
-                format_predictions(f"{training_args.output_dir}/predictions_eval_None.json")
-                os.system(f"cd eval_spider && python evaluate.py --gold ../../dataset_files/ori_dataset/spider/dev_gold.sql --pred {training_args.output_dir}/predictions.sql --etype all --db ../../dataset_files/ori_dataset/spider/database --table ../../dataset_files/ori_dataset/spider/tables.json")
+                if isinstance(trainer, SpiderTrainer):
+                    format_predictions(f"{training_args.output_dir}/predictions_eval_None.json")
+                    os.system(f"cd eval_spider && python evaluate.py --gold ../../dataset_files/ori_dataset/spider/dev_gold.sql --pred {training_args.output_dir}/predictions.sql --etype all --db ../../dataset_files/ori_dataset/spider/database --table ../../dataset_files/ori_dataset/spider/tables.json")
             except Exception as e:
                 print(e)
                 print("The detailed evaluation threw an error, skipping.")
