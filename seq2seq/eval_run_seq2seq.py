@@ -43,6 +43,7 @@ from seq2seq.utils.sparc import SParCTrainer
 from seq2seq.utils.cosql import CoSQLTrainer
 
 from seq2seq.eval_spider.format_predictions import format_predictions
+from seq2seq.eval_spider.evaluation import evaluate, build_foreign_key_map_from_json
 
 from seq2seq.preprocess.get_relation2id_dict import get_relation2id_dict
 from seq2seq.model.t5_relation_config import RASATConfig
@@ -293,7 +294,13 @@ def main() -> None:
             try:
                 if isinstance(trainer, SpiderTrainer):
                     format_predictions(f"{training_args.output_dir}/predictions_eval_None.json")
-                    os.system(f"cd seq2seq/eval_spider && python evaluate.py --gold ../../dataset_files/ori_dataset/spider/dev_gold.sql --pred {training_args.output_dir}/predictions.sql --etype all --db ../../dataset_files/ori_dataset/spider/database --table ../../dataset_files/ori_dataset/spider/tables.json")
+                    gold = f"{training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/dev_gold.sql"
+                    pred = f"{training_args.output_dir}/predictions.sql"
+                    db_dir = f"{training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/database"
+                    etype = "all"
+                    table = f"{training_args.output_dir}../../dataset_files/ori_dataset/spider/tables.json"
+                    kmaps = build_foreign_key_map_from_json(table)
+                    evaluate(gold, pred, db_dir, etype, kmaps)
             except Exception as e:
                 print(e)
                 print("The detailed evaluation threw an error, skipping.")
