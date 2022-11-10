@@ -50,25 +50,43 @@ To install Docker on Ubuntu, run:
 ./install_docker.sh
 ```
 
-You can simply use 
+Grant file permissions so you can run experiments:
+```
+chmod -R 777 seq2seq/
+chmod -R 777 dataset_files/
+```
+
+Run the following command to start a new docker container for an interaction terminal that supports PICARD. You may need to uncomment the line of the Makefile with `--gpus all` if you are not using a GPU.
 ```
 make eval
 ```
-to start a new docker container for an interaction terminal that supports PICARD. 
 
-Since the docker environment doesn't have stanza, so you should run these commands before training or evaluting:
+Since the docker environment doesn't have stanza, you should run these commands before training or evaluting:
 ```
 pip install stanza
 python3 seq2seq/stanza_downloader.py
-CUDA_VISIBLE_DEVICES="0"
 wandb login
 ```
 
-Then to run training/evaluation, run:
+Then to run training/evaluation on a CPU, run:
 ```
 python3 seq2seq/eval_run_seq2seq.py configs/spider/eval_spider_rasat_4160.json
 ```
 The second argument can be changed to the config file you want to use for training/evaluation.
+
+On a single GPU with at least 32 GiB memory, run:
+```
+CUDA_VISIBLE_DEVICES="0"
+python3 seq2seq/run_seq2seq.py configs/sparc/train_sparc_rasat_small.json
+```
+
+With multiple GPUs with at least 32 GiB memory each, run:
+```
+CUDA_VISIBLE_DEVICES="2,3"
+python3 -m torch.distributed.launch --nnodes=1 --nproc_per_node=2 seq2seq/run_seq2seq.py configs/sparc/train_sparc_rasat_small.json
+```
+
+and you should set --nproc_per_node=#gpus to make full use of all GPUs. A recommend total_batch_size = #gpus * gradient_accumulation_steps * per_device_train_batch_size is 2048.
 
 For long runs, run the training/evaluation in the background with:
 ```
@@ -102,43 +120,7 @@ pip install -r requirements.txt
 
 However, you could not use PICARD in that way.
 
-
-
-
-## Training
-
-You can simply run these code like this:
-
-- Single-GPU
-```
-CUDA_VISIBLE_DEVICES="0" python3 seq2seq/run_seq2seq.py configs/sparc/train_sparc_rasat_small.json
-```
-
-- Multi-GPU 
-```
-CUDA_VISIBLE_DEVICES="2,3" python3 -m torch.distributed.launch --nnodes=1 --nproc_per_node=2 seq2seq/run_seq2seq.py configs/sparc/train_sparc_rasat_small.json
-```
-
-and you should set --nproc_per_node=#gpus to make full use of all GPUs. A recommend total_batch_size = #gpus * gradient_accumulation_steps * per_device_train_batch_size is 2048.
-
-
-## Evalutaion
-
-You can simply run these codes:
-
-```
-CUDA_VISIBLE_DEVICES="2" python3 seq2seq/eval_run_seq2seq.py configs/cosql/eval_cosql_rasat_576.json
-```
-
-Notice：If you use Docker for evaluation, you may need to change the filemode for these dictionary before starting a new docker container:
-
-```
-chmod -R 777 seq2seq/
-chmod -R 777 dataset_files/
-```
-
-
-# Result and checkpoint
+# Original RASAT Results and Checkpoints
 
 The models shown below use database content, and the corresponding column like "edge_type", and "use_coref" are parameters set in config.json. All these model checkpoints are available in Huggingface. 
 
@@ -173,5 +155,5 @@ The models shown below use database content, and the corresponding column like "
 |                           + PICARD | Default   | FALSE          | FALSE     | **75.3**    | 78.3    | **70.9**     | 74.5     |
 
 
-# Acknowledgements
+# Original Acknowledgements
 We would like to thank Tao Yu, Hongjin Su, and Yusen Zhang for running evaluations on our submitted models. We would also like to thank Lyuwen Wu for her comments on the Readme file of our code repository.
