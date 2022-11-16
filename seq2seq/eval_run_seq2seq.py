@@ -293,14 +293,15 @@ def main() -> None:
             # Print full eval metrics for Spider
             try:
                 if isinstance(trainer, SpiderTrainer):
-                    format_predictions(f"{training_args.output_dir}/predictions_eval_None.json")
-                    gold = f"{training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/dev_gold.sql"
-                    pred = f"{training_args.output_dir}/predictions.sql"
-                    db_dir = f"{training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/database"
-                    etype = "all"
-                    table = f"{training_args.output_dir}../../dataset_files/ori_dataset/spider/tables.json"
-                    kmaps = build_foreign_key_map_from_json(table)
-                    evaluate(gold, pred, db_dir, etype, kmaps)
+                    with open(f"{training_args.output_dir}/eval_breakdown.txt", 'w') as sys.stdout:
+                        format_predictions(f"{training_args.output_dir}/predictions_eval_None.json")
+                        gold = f"{training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/dev_gold.sql"
+                        pred = f"{training_args.output_dir}/predictions.sql"
+                        db_dir = f"{training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/database"
+                        etype = "all"
+                        table = f"{training_args.output_dir}../../dataset_files/ori_dataset/spider/tables.json"
+                        kmaps = build_foreign_key_map_from_json(table)
+                        evaluate(gold, pred, db_dir, etype, kmaps)
             except Exception as e:
                 print(e)
                 print("The detailed evaluation threw an error, skipping.")
