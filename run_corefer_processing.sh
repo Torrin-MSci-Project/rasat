@@ -1,5 +1,5 @@
 echo "Start install spacy"
-pip3 install spacy==3.1.2 
+pip3 install spacy==3.1.2
 
 echo "Start download spacy model"
 python -m spacy download en_core_web_lg
@@ -19,4 +19,4 @@ echo "Start download stanza en resource"
 python -c "import stanza;stanza.download('en')"
 
 echo "Start coref process"
-python3 get_coref.py --input_path ./cosql_dataset/sql_state_tracking/cosql_dev.json --output_path ./dev_coref.json --dataset_name cosql --mode dev
+python3 get_coref.py --input_path ./dataset_files --output_path ./dataset_files/preprocessed_dataset/spider-dk/dev_coref.json --dataset_name spider-dk --mode dev

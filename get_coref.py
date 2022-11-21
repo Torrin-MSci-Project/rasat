@@ -85,7 +85,7 @@ def pipeline(entry: dict, db: dict, dataset_name: str, data_idx: int):
         entry["final_preprocessed_text_list"] = []
         if dataset_name in ["cosql", "sparc"]:
             entry =  multi_turn_pipeline(entry, db, dataset_name, data_idx)
-        elif dataset_name in ["spider"]:
+        elif dataset_name in ["spider", "spider-dk"]:
             entry = single_turn_pipeline(entry, db, dataset_name, data_idx)
         return entry
 
@@ -128,7 +128,10 @@ def quote_normalization(dataset_name, data_idx, question):
 def preprocess_question(entry: dict, db: dict, turn: str, dataset_name: str, data_idx: int):
     """ Tokenize, lemmatize, lowercase question"""
     if turn == "-1":
-        question = " ".join(quote_normalization(dataset_name, data_idx, entry["question_toks"]))
+        if entry.get('question_toks'):
+            question = " ".join(quote_normalization(dataset_name, data_idx, entry["question_toks"]))
+        else:
+            question = entry['question']
         entry["processed_text_list"] = [question]
     elif "#" in turn:
         parent_idx, son_idx = turn.split("#")
@@ -175,6 +178,8 @@ def init_dataset_path(data_base_dir, dataset_name, mode):
             dataset_path=os.path.join(data_base_dir, "ori_dataset", "cosql_dataset/sql_state_tracking/", "cosql_dev.json")
             table_data_path=os.path.join(data_base_dir, "ori_dataset", "cosql_dataset", "tables.json")
             
+        elif dataset_name == "spider-dk":
+            dataset_path = os.path.join(data_base_dir, "ori_dataset", dataset_name, "spider-DK.json")
         else:
             raise NotImplementedError
         # dataset_output_path=os.path.join(data_base_dir, "preprocessed_dataset", dataset_name, "dev.bin")
@@ -189,7 +194,7 @@ def init_dataset_path(data_base_dir, dataset_name, mode):
 def process_dataset(dataset, dataset_name, mode):
     text_list = []
     for idx, entry in tqdm(enumerate(dataset)):
-        if dataset_name in ["spider"]:
+        if dataset_name in ["spider", "spider-dk"]:
             entry = pipeline(entry, {}, dataset_name, idx)
         elif dataset_name in ["cosql", "sparc"]:
             entry = pipeline(entry, {}, dataset_name, idx)
@@ -225,7 +230,7 @@ def single_turn_pipeline(entry: dict, db: dict, dataset_name: str, data_idx: int
     return entry
 
 def getText(dataset_path, dataset_name, mode):
-    # _, _, _, dataset_path, _ = init_dataset_path(data_base_dir, dataset_name, mode)
+    _, _, _, dataset_path, _ = init_dataset_path(dataset_path, dataset_name, mode)
     
     with open(dataset_path, 'r') as load_f: 
         fcntl.flock(load_f.fileno(), fcntl.LOCK_EX)
@@ -267,7 +272,7 @@ def coref2assertSame(data_ori_dir, data_cur_dir, dataset_name, mode):
 
 def main():
     mode_list = ["dev", "train"]
-    dataset_name_list = ["cosql", "spider", "sparc"]
+    dataset_name_list = ["cosql", "spider", "sparc", "spider-dk"]
     data_base_dir = "dataset_files/"
     nlp = init_nlp()
     for dataset_name in dataset_name_list:
@@ -295,7 +300,7 @@ parser.add_argument('--input_path', type=str,
                     help='Storage path for original dataset file that needed to be preprocessed.')
 parser.add_argument('--output_path', type=str,
                     help='Output path for the generated coreference file.')
-parser.add_argument('--dataset_name', type=str, choices=['sparc', 'cosql', 'spider'],
+parser.add_argument('--dataset_name', type=str, choices=['sparc', 'cosql', 'spider', 'spider-dk'],
                     help='Name of dataset being preprocessed')
 parser.add_argument('--mode', type=str, choices = ['train', 'dev'], help="Dataset mode.")
 args = parser.parse_args()
