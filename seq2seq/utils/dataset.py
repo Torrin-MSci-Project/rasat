@@ -165,7 +165,7 @@ class DataArguments:
             "spider": "./seq2seq/metrics/spider",
             "sparc": "./seq2seq/metrics/sparc",
             "cosql": "./seq2seq/metrics/cosql",
-            "spider_dk": "./seq1seq/datasets/spider_dk",
+            "spider_dk": "./seq2seq/metrics/spider",
         },
         metadata={"help": "Paths of the metric modules."},
     )

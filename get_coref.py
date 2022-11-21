@@ -84,7 +84,7 @@ def pipeline(entry: dict, db: dict, dataset_name: str, data_idx: int):
         entry["final_preprocessed_text_list"] = []
         if dataset_name in ["cosql", "sparc"]:
             entry =  multi_turn_pipeline(entry, db, dataset_name, data_idx)
-        elif dataset_name in ["spider", "spider-dk"]:
+        elif dataset_name in ["spider", "spider_dk"]:
             entry = single_turn_pipeline(entry, db, dataset_name, data_idx)
         return entry
 
@@ -177,7 +177,7 @@ def init_dataset_path(data_base_dir, dataset_name, mode):
             dataset_path=os.path.join(data_base_dir, "ori_dataset", "cosql_dataset/sql_state_tracking/", "cosql_dev.json")
             table_data_path=os.path.join(data_base_dir, "ori_dataset", "cosql_dataset", "tables.json")
             
-        elif dataset_name == "spider-dk":
+        elif dataset_name == "spider_dk":
             dataset_path = os.path.join(data_base_dir, "ori_dataset", dataset_name, "spider-DK.json")
         else:
             raise NotImplementedError
@@ -193,7 +193,7 @@ def init_dataset_path(data_base_dir, dataset_name, mode):
 def process_dataset(dataset, dataset_name, mode):
     text_list = []
     for idx, entry in tqdm(enumerate(dataset)):
-        if dataset_name in ["spider", "spider-dk"]:
+        if dataset_name in ["spider", "spider_dk"]:
             entry = pipeline(entry, {}, dataset_name, idx)
         elif dataset_name in ["cosql", "sparc"]:
             entry = pipeline(entry, {}, dataset_name, idx)
@@ -271,7 +271,7 @@ def coref2assertSame(data_ori_dir, data_cur_dir, dataset_name, mode):
 
 def main():
     mode_list = ["dev", "train"]
-    dataset_name_list = ["cosql", "spider", "sparc", "spider-dk"]
+    dataset_name_list = ["cosql", "spider", "sparc", "spider_dk"]
     data_base_dir = "dataset_files/"
     nlp = init_nlp()
     for dataset_name in dataset_name_list:
@@ -300,7 +300,7 @@ if __name__ == "__main__":
                         help='Storage path for original dataset file that needed to be preprocessed.')
     parser.add_argument('--output_path', type=str,
                         help='Output path for the generated coreference file.')
-    parser.add_argument('--dataset_name', type=str, choices=['sparc', 'cosql', 'spider', 'spider-dk'],
+    parser.add_argument('--dataset_name', type=str, choices=['sparc', 'cosql', 'spider', 'spider_dk'],
                         help='Name of dataset being preprocessed')
     parser.add_argument('--mode', type=str, choices = ['train', 'dev'], help="Dataset mode.")
     args = parser.parse_args()

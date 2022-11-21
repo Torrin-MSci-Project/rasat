@@ -70,7 +70,7 @@ wandb login
 
 Then to run training/evaluation on a CPU, run:
 ```
-python3 seq2seq/eval_run_seq2seq.py configs/spider/eval_spider_rasat_4160.json
+python3 seq2seq/run_seq2seq.py configs/spider/eval_spider_rasat_4160.json
 ```
 The second argument can be changed to the config file you want to use for training/evaluation.
 
@@ -90,7 +90,7 @@ and you should set --nproc_per_node=#gpus to make full use of all GPUs. A recomm
 
 For long runs, run the training/evaluation in the background with:
 ```
-nohup python3 seq2seq/eval_run_seq2seq.py configs/spider/eval_spider_rasat_4160.json &
+nohup python3 seq2seq/run_seq2seq.py configs/spider/eval_spider_rasat_4160.json &
 ```
 This logs output to nohup.out. You can exit the Docker container and close the terminal if you use nohup.
 
