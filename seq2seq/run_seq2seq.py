@@ -216,7 +216,7 @@ def main() -> None:
             "ignore_pad_token_for_loss": data_training_args.ignore_pad_token_for_loss,
             "target_with_db_id": data_training_args.target_with_db_id,
         }
-        if data_args.dataset in ["spider"]:
+        if data_args.dataset.replace('-', '_') in ["spider", "spider_dk"]:
             trainer = SpiderTrainer(**trainer_kwargs)
         elif data_args.dataset in ["cosql", "cosql+spider"]:
             trainer = CoSQLTrainer(**trainer_kwargs)
