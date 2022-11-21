@@ -103,7 +103,7 @@ docker start `docker ps -q -l` && docker attach `docker ps -q -l`
 To print full eval metrics on a completed Spider experiment with results directory e.g. rasat-spider-dev-20-10-2022, run:
 ```
 cd seq2seq/eval_spider
-./eval_experiment rasat-spider-dev-20-10-2022
+./eval_experiment rasat-spider-dev-20-10-2022 spider
 ```
 
 **Note:We only use PICARD for seperately evaluation.**

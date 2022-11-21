@@ -12,5 +12,6 @@ unzip dataset_files/spider-dk.zip -d dataset_files/ori_dataset/
 unzip dataset_files/cosql_dataset.zip -d dataset_files/ori_dataset/
 unzip dataset_files/sparc.zip -d dataset_files/ori_dataset/
 unzip preprocessed_dataset.zip -d ./dataset_files/
+python -c "from get_coref import format_gold; format_gold('dataset_files/ori_dataset/spider-dk/spider-DK.json')"
 chmod -R 777 seq2seq/
 chmod -R 777 dataset_files/

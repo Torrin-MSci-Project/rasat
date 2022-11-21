@@ -180,6 +180,7 @@ def init_dataset_path(data_base_dir, dataset_name, mode):
             
         elif dataset_name == "spider-dk":
             dataset_path = os.path.join(data_base_dir, "ori_dataset", dataset_name, "spider-DK.json")
+            format_gold(dataset_path)
         else:
             raise NotImplementedError
         # dataset_output_path=os.path.join(data_base_dir, "preprocessed_dataset", dataset_name, "dev.bin")
@@ -270,6 +271,23 @@ def coref2assertSame(data_ori_dir, data_cur_dir, dataset_name, mode):
                 
         assert true_dataset[idx] == cur_dataset[idx], f"{idx}:\n{true_dataset[idx] }\n{ cur_dataset[idx]}"
 
+def format_gold(json_filename):
+    """
+    Formats gold SQL queries from a .json file to a .sql file so they can be evaluated
+    """
+    gold_queries = []
+
+    with open(json_filename, 'r') as input_file:
+        all_instances = json.loads(input_file.read())
+        for p in all_instances:
+            gold_queries.append(p['query'])
+
+    out_filename = os.path.join(os.path.dirname(json_filename), "dev_gold.sql")
+
+    with open(out_filename, 'w') as output_file:
+        for q in gold_queries:
+            output_file.write(q + '\n')
+
 def main():
     mode_list = ["dev", "train"]
     dataset_name_list = ["cosql", "spider", "sparc", "spider-dk"]
@@ -295,14 +313,15 @@ def get_coref_by_path(input_path, output_path, dataset_name, mode):
 
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--input_path', type=str,
-                    help='Storage path for original dataset file that needed to be preprocessed.')
-parser.add_argument('--output_path', type=str,
-                    help='Output path for the generated coreference file.')
-parser.add_argument('--dataset_name', type=str, choices=['sparc', 'cosql', 'spider', 'spider-dk'],
-                    help='Name of dataset being preprocessed')
-parser.add_argument('--mode', type=str, choices = ['train', 'dev'], help="Dataset mode.")
-args = parser.parse_args()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input_path', type=str,
+                        help='Storage path for original dataset file that needed to be preprocessed.')
+    parser.add_argument('--output_path', type=str,
+                        help='Output path for the generated coreference file.')
+    parser.add_argument('--dataset_name', type=str, choices=['sparc', 'cosql', 'spider', 'spider-dk'],
+                        help='Name of dataset being preprocessed')
+    parser.add_argument('--mode', type=str, choices = ['train', 'dev'], help="Dataset mode.")
+    args = parser.parse_args()
 
-get_coref_by_path(input_path = args.input_path, output_path = args.output_path, dataset_name = args.dataset_name, mode = args.mode)
+    get_coref_by_path(input_path = args.input_path, output_path = args.output_path, dataset_name = args.dataset_name, mode = args.mode)
