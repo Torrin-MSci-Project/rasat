@@ -9,7 +9,6 @@ import stanza
 import argparse
 
 
-
 nlp_tokenize = stanza.Pipeline('en', processors='tokenize', tokenize_pretokenized = False, use_gpu=False)
 # nlp_pretokenize = stanza.Pipeline('en', processors='tokenize', tokenize_pretokenized = True,use_gpu=True)
 
@@ -180,7 +179,6 @@ def init_dataset_path(data_base_dir, dataset_name, mode):
             
         elif dataset_name == "spider-dk":
             dataset_path = os.path.join(data_base_dir, "ori_dataset", dataset_name, "spider-DK.json")
-            format_gold(dataset_path)
         else:
             raise NotImplementedError
         # dataset_output_path=os.path.join(data_base_dir, "preprocessed_dataset", dataset_name, "dev.bin")
@@ -270,23 +268,6 @@ def coref2assertSame(data_ori_dir, data_cur_dir, dataset_name, mode):
             cur[key]["used_turn"] = sorted(cur[key]["used_turn"])
                 
         assert true_dataset[idx] == cur_dataset[idx], f"{idx}:\n{true_dataset[idx] }\n{ cur_dataset[idx]}"
-
-def format_gold(json_filename):
-    """
-    Formats gold SQL queries from a .json file to a .sql file so they can be evaluated
-    """
-    gold_queries = []
-
-    with open(json_filename, 'r') as input_file:
-        all_instances = json.loads(input_file.read())
-        for p in all_instances:
-            gold_queries.append(p['query'])
-
-    out_filename = os.path.join(os.path.dirname(json_filename), "dev_gold.sql")
-
-    with open(out_filename, 'w') as output_file:
-        for q in gold_queries:
-            output_file.write(q + '\n')
 
 def main():
     mode_list = ["dev", "train"]

@@ -120,6 +120,20 @@ pip install -r requirements.txt
 
 However, you could not use PICARD in that way.
 
+## Manual Preprocessing
+
+If you want to generate coreference resolution files by yourself, you could create a new conda environment to install coreferee library since it may have a version conflict with other libraries. The install commands are as follows:
+```
+python -m venv coreferee
+source coreferee/bin/activate
+bash run_corefer_processing.sh
+```
+
+and you can just assign the dataset name and the corresponding split, such as
+```
+python3 get_coref.py --input_path ./cosql_dataset/sql_state_tracking/cosql_dev.json --output_path ./dev_coref.json --dataset_name cosql --mode dev
+```
+
 # Original RASAT Results and Checkpoints
 
 The models shown below use database content, and the corresponding column like "edge_type", and "use_coref" are parameters set in config.json. All these model checkpoints are available in Huggingface. 
