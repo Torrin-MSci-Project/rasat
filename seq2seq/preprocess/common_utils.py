@@ -151,7 +151,7 @@ class Preprocessor():
         entry["final_preprocessed_text_list"] = []
         if dataset_name in ["cosql", "sparc"]:
             entry =  self.multi_turn_pipeline(entry, db, dataset_name, data_idx)
-        elif dataset_name in ["spider"]:
+        else:
             entry = self.single_turn_pipeline(entry, db, dataset_name, data_idx)
         return entry
 
@@ -294,7 +294,10 @@ class Preprocessor():
         """ Tokenize, lemmatize, lowercase question"""
 
         if turn == "-1":
-            question = " ".join(quote_normalization(dataset_name, data_idx, entry["question_toks"]))
+            if dataset_name == "spider_dk":
+                question = entry["question"]
+            else:
+                question = " ".join(quote_normalization(dataset_name, data_idx, entry["question_toks"]))
             # question = "\n".join(self.seperate_sent(question))
             entry["processed_text_list"] = [question]
         elif "#" in turn:

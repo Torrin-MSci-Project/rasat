@@ -51,7 +51,7 @@ def get_idx_list(res_dict, dataset_name):
                 continue
             a = tmp.copy()
             total_res.append(a)
-    elif dataset_name in ["spider"]:
+    else:
         total_res = [['-1']]
     return total_res
 
@@ -68,7 +68,7 @@ def get_idx_list_changeOrder(res_dict, dataset_name):
                 continue
             a = tmp.copy()
             total_res.append(a)
-    elif dataset_name in ["spider"]:
+    else:
         total_res = [['-1']]
     return total_res
 

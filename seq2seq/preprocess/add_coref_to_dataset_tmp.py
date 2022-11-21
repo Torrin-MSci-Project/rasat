@@ -76,10 +76,12 @@ def text_list2coref_json(output_path, mode, nlp):
 
 def main():
     mode_list = ["train", "dev"]
-    dataset_name_list = ["spider", "cosql"]
+    dataset_name_list = ["spider", "cosql", "spider_dk"]
     nlp = init_nlp()
     for datatset_name in dataset_name_list:
         for mode in mode_list:
+            if datatset_name == 'spider_dk' and mode == 'train':
+                continue
             output_path = os.path.join("../../dataset_files/preprocessed_dataset/", datatset_name)
             text_list2coref_json(output_path, mode, nlp)
 
