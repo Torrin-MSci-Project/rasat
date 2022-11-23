@@ -557,9 +557,9 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
             
             # log failures
             if exact_score == 0: 
-                failures.append(p_str)
+                failures.append(p_str + "\t [FAILURE]")
             else:
-                failures.append('_')
+                failures.append(p_str)
 
             # print all queries
             print("{} {} pred: {}".format(index, hardness,p_str))
@@ -592,7 +592,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
                 'partial': partial_scores
             })
 
-    # Write failures to a file
+    # Write predicted queries and their result to a file
     with open(os.path.join(os.path.dirname(predict), 'failures.txt'), 'w') as f:
         f.write('\n'.join(failures))
 
@@ -638,8 +638,11 @@ def eval_exec_match(db, p_str, g_str, pred, gold):
     except:
         return False
 
-    cursor.execute(g_str)
-    q_res = cursor.fetchall()
+    try:
+        cursor.execute(g_str)
+        q_res = cursor.fetchall()
+    except:
+        return False
 
     def res_map(res, val_units):
         rmap = {}
