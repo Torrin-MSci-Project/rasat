@@ -1,4 +1,3 @@
-['SELECT count(*) FROM singer', 'concert_singer']
 0 easy pred: select count(*) from singer
 0 easy gold: SELECT count(*) FROM singer
 
