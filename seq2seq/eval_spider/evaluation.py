@@ -28,6 +28,7 @@ import argparse
 
 from process_sql import tokenize, get_schema, get_tables_with_alias, Schema, get_sql
 
+
 # Flag to disable value evaluation
 DISABLE_VALUE = True
 # Flag to disable distinct in select evaluation
@@ -510,9 +511,16 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
         hardness = evaluator.eval_hardness(g_sql)
         scores[hardness]['count'] += 1
         scores['all']['count'] += 1
+        current_error = False
 
         try:
             p_sql = get_sql(schema, p_str)
+            if len(p_sql.get('from').get('table_units', [])) > len(set([u[1] for u in p_sql.get('from').get('table_units', [])])):
+                # If tables are repeated in the FROM clause this is invalid SQL
+                0/0
+            if len(p_sql.get('from').get('table_units', [])) > 1 and len(p_sql.get('from').get('conds', [])) == 0:
+                # If multiple tables are in the FROM clause with no JOIN this is invalid SQL
+                0/0
         except:
             # If p_sql is not valid, then we will use an empty sql to evaluate with the correct sql
             p_sql = {
@@ -535,6 +543,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
             }
             eval_err_num += 1
             print("eval_err_num:{}".format(eval_err_num))
+            current_error = True
 
         # rebuild sql for value evaluation
         kmap = kmaps[db_name]
@@ -547,7 +556,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
 
         current_pred = p_str
 
-        if etype in ["all", "exec"]:
+        if etype in ["all", "exec"] and not current_error:
             exec_score = eval_exec_match(db, p_str, g_str, p_sql, g_sql)
             if exec_score:
                 scores[hardness]['exec'] += 1.0
