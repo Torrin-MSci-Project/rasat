@@ -515,12 +515,13 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
 
         try:
             p_sql = get_sql(schema, p_str)
-            if len(p_sql.get('from').get('table_units', [])) > len(set([u[1] for u in p_sql.get('from').get('table_units', [])])):
-                # If tables are repeated in the FROM clause this is invalid SQL
-                0/0
-            if len(p_sql.get('from').get('table_units', [])) > 1 and len(p_sql.get('from').get('conds', [])) == 0:
-                # If multiple tables are in the FROM clause with no JOIN this is invalid SQL
-                0/0
+            # Uncomment the following if statement for PROTON evaluation - some entries freeze evaluation if they are executed
+            # if len(p_sql.get('from').get('table_units', [])) > len(set([u[1] for u in p_sql.get('from').get('table_units', [])])):
+                # # If tables are repeated in the FROM clause this is invalid SQL
+                # 0/0
+            # if len(p_sql.get('from').get('table_units', [])) > 1 and len(p_sql.get('from').get('conds', [])) == 0:
+                # # If multiple tables are in the FROM clause with no JOIN this is invalid SQL
+                # 0/0
         except:
             # If p_sql is not valid, then we will use an empty sql to evaluate with the correct sql
             p_sql = {
