@@ -35,6 +35,9 @@ def parse_predictions(results_filename, dataset_filename):
             out_file.write(p + '\n')
 
 if __name__ == "__main__":
+    print("Evaluating PROTON results.")
+    print("Ensure you have uncommented the additional validation lines in the evaluate() function in evaluation.py, or this script may freeze.")
+    
     results_filenames = [
         "../../experiment/proton-spider-paper/result_spider.txt",
         "../../experiment/proton-spider-dk-paper/result_dk.txt",
