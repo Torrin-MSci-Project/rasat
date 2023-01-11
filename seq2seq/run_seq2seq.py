@@ -272,14 +272,14 @@ def main() -> None:
             trainer.save_metrics("eval", metrics)
 
             # Print full eval metrics for Spider
-            try:
-                if isinstance(trainer, SpiderTrainer):
-                    with open(f"{training_args.output_dir}/eval_breakdown.txt", 'w') as sys.stdout:
-                        format_predictions(f"{training_args.output_dir}/predictions_eval_None.json")
-                        os.system(f"cd seq2seq/eval_spider && python evaluation.py --gold {training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/dev_gold.sql --pred {training_args.output_dir}/predictions.sql --etype all --db {training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/database --table {training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/tables.json > {training_args.output_dir}/eval_breakdown.txt && cat {training_args.output_dir}/eval_breakdown.txt")
-            except Exception as e:
-                print(e)
-                print("The detailed evaluation threw an error, skipping.")
+            #try:
+                #if isinstance(trainer, SpiderTrainer):
+                    #with open(f"{training_args.output_dir}/eval_breakdown.txt", 'w') as sys.stdout:
+                        #format_predictions(f"{training_args.output_dir}/predictions_eval_None.json")
+                        #os.system(f"cd seq2seq/eval_spider && python evaluation.py --gold {training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/dev_gold.sql --pred {training_args.output_dir}/predictions.sql --etype all --db {training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/database --table {training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/tables.json > {training_args.output_dir}/eval_breakdown.txt && cat {training_args.output_dir}/eval_breakdown.txt")
+            #except Exception as e:
+                #print(e)
+                #print("The detailed evaluation threw an error, skipping.")
 
         # Testing
         if training_args.do_predict:

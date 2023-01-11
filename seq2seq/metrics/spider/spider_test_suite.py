@@ -56,6 +56,9 @@ def compute_test_suite_metric(predictions, references, db_dir: Optional[str] = N
             )
         except AssertionError as e:
             logger.warning(f"unexpected evaluation error: {e.args[0]}")
+        print(_["exec"])
+        print (reference["question"], prediction, reference["label"])
+        print()
     evaluator.finalize()
     return {
         "exec": evaluator.scores["all"]["exec"],
