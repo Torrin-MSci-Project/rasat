@@ -42,9 +42,6 @@ from seq2seq.utils.spider import SpiderTrainer
 from seq2seq.utils.sparc import SParCTrainer
 from seq2seq.utils.cosql import CoSQLTrainer
 
-from seq2seq.eval_spider.format_predictions import format_predictions
-from seq2seq.eval_spider.evaluation import evaluate, build_foreign_key_map_from_json
-
 from seq2seq.preprocess.get_relation2id_dict import get_relation2id_dict
 from seq2seq.model.t5_relation_config import RASATConfig
 
