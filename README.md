@@ -42,8 +42,9 @@ cd rasat
 ./download_datasets.sh
 ```
 
-### Use docker
-The best performance is achieved by exploiting PICARD[1], and if you want to reproduce it, we recommend you use Docker.
+### Pull the Docker image
+
+The best performance is achieved by exploiting PICARD, and if you want to reproduce it, we recommend you use Docker.
 
 To install Docker on Ubuntu, run:
 ```
@@ -56,7 +57,7 @@ chmod -R 777 seq2seq/
 chmod -R 777 dataset_files/
 ```
 
-Run the following command to start a new docker container for an interaction terminal that supports PICARD. You may need to uncomment the line of the Makefile with `--gpus all` if you are not using a GPU.
+Run the following command to start a new Docker container for an interaction terminal that supports PICARD. You may need to uncomment the line of the Makefile with `--gpus all` if you are not using a GPU.
 ```
 make eval
 ```
@@ -68,6 +69,8 @@ python3 seq2seq/stanza_downloader.py
 wandb login
 ```
 
+## Evaluation
+
 Then to run evaluation on a CPU, run:
 ```
 python3 seq2seq/eval_run_seq2seq.py configs/spider/eval_spider_rasat_4160.json
@@ -76,8 +79,9 @@ The second argument can be changed to the config file you want to use for traini
 
 Note to use PICARD you must run `seq2seq/eval_run_seq2seq.py` and not `seq2seq/run_seq2seq.py`.
 
-For training, run:
+## Training
 
+For training, run:
 ```
 python3 seq2seq/run_seq2seq.py configs/sparc/train_sparc_rasat_small.json
 ```
@@ -100,10 +104,9 @@ For long runs, run the training/evaluation in the background with:
 ```
 nohup python3 seq2seq/eval_run_seq2seq.py configs/spider/eval_spider_rasat_4160.json &
 ```
-This logs output to nohup.out. You can exit the Docker container and close the terminal if you use nohup.
+This logs output to nohup.out. You can exit the Docker container with Ctrl-P then Ctrl-Q and close the terminal if you use nohup.
 
 To re-enter the last exited Docker container run:
-
 ```
 docker start `docker ps -q -l` && docker attach `docker ps -q -l`
 ```
@@ -114,9 +117,10 @@ cd seq2seq/eval_spider
 ./eval_experiment rasat-spider-dev-20-10-2022 spider
 ```
 
-**Note:We only use PICARD for seperately evaluation.**
+**Note: PICARD is only used for evaluation.**
 
-### Do not use Docker
+### Alternative: run without Docker
+
 If Docker is not available to you, you could also run it in a python 3.9.7 environment 
 
 ```bash
@@ -137,7 +141,7 @@ source coreferee/bin/activate
 bash run_corefer_processing.sh
 ```
 
-and you can just assign the dataset name and the corresponding split, such as
+and edit the last line of `run_corefer_processing.sh` to assign the dataset name and the corresponding split, such as
 ```
 python3 get_coref.py --input_path ./cosql_dataset/sql_state_tracking/cosql_dev.json --output_path ./dev_coref.json --dataset_name cosql --mode dev
 ```
