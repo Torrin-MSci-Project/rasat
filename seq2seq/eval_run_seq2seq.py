@@ -235,7 +235,7 @@ def main() -> None:
             "ignore_pad_token_for_loss": data_training_args.ignore_pad_token_for_loss,
             "target_with_db_id": data_training_args.target_with_db_id,
         }
-        if data_args.dataset in ["spider"]:
+        if data_args.dataset.replace('-', '_') in ["spider", "spider_dk"]:
             trainer = SpiderTrainer(**trainer_kwargs)
         elif data_args.dataset in ["sparc", "sparc+spider"]:
             trainer = SParCTrainer(**trainer_kwargs)
@@ -289,22 +289,6 @@ def main() -> None:
 
             trainer.log_metrics("eval", metrics)
             trainer.save_metrics("eval", metrics)
-
-            # Print full eval metrics for Spider
-            try:
-                if isinstance(trainer, SpiderTrainer):
-                    with open(f"{training_args.output_dir}/eval_breakdown.txt", 'w') as sys.stdout:
-                        format_predictions(f"{training_args.output_dir}/predictions_eval_None.json")
-                        gold = f"{training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/dev_gold.sql"
-                        pred = f"{training_args.output_dir}/predictions.sql"
-                        db_dir = f"{training_args.output_dir}/../../dataset_files/ori_dataset/{data_args.dataset.replace('_', '-')}/database"
-                        etype = "all"
-                        table = f"{training_args.output_dir}../../dataset_files/ori_dataset/spider/tables.json"
-                        kmaps = build_foreign_key_map_from_json(table)
-                        evaluate(gold, pred, db_dir, etype, kmaps)
-            except Exception as e:
-                print(e)
-                print("The detailed evaluation threw an error, skipping.")
 
         # Testing
         if training_args.do_predict:
