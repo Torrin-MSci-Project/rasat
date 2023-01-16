@@ -68,11 +68,19 @@ python3 seq2seq/stanza_downloader.py
 wandb login
 ```
 
-Then to run training/evaluation on a CPU, run:
+Then to run evaluation on a CPU, run:
 ```
-python3 seq2seq/run_seq2seq.py configs/spider/eval_spider_rasat_4160.json
+python3 seq2seq/eval_run_seq2seq.py configs/spider/eval_spider_rasat_4160.json
 ```
 The second argument can be changed to the config file you want to use for training/evaluation.
+
+Note to use PICARD you must run `seq2seq/eval_run_seq2seq.py` and not `seq2seq/run_seq2seq.py`.
+
+For training, run:
+
+```
+python3 seq2seq/run_seq2seq.py configs/sparc/train_sparc_rasat_small.json
+```
 
 On a single GPU with at least 32 GiB memory, run:
 ```
@@ -90,7 +98,7 @@ and you should set --nproc_per_node=#gpus to make full use of all GPUs. A recomm
 
 For long runs, run the training/evaluation in the background with:
 ```
-nohup python3 seq2seq/run_seq2seq.py configs/spider/eval_spider_rasat_4160.json &
+nohup python3 seq2seq/eval_run_seq2seq.py configs/spider/eval_spider_rasat_4160.json &
 ```
 This logs output to nohup.out. You can exit the Docker container and close the terminal if you use nohup.
 
