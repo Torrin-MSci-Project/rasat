@@ -274,6 +274,8 @@ def _prepare_train_split(
             example['relations'] = relation_matrix_l[idx]  
             return example
         dataset = dataset.map(add_relation_info_train, with_indices=True)
+        print(f"Example input_ids: {dataset[42]['input_ids']}")
+        print(f"Example relations: {dataset[42]['relations']}")
 
     return TrainSplit(dataset=dataset, schemas=schemas)
 
